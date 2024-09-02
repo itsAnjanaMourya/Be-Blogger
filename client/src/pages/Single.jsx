@@ -14,14 +14,14 @@ const Single = () => {
   const navigate = useNavigate()
 
   const postId = location.pathname.split("/")[2]
-
+  const apiUrl = import.meta.env.VITE_BACKEND_API_URL;
   console.log(post)
   const {currentUser} = useContext(AuthContext)
 
     useEffect(()=>{
       const fetchData = async ()=>{
         try{
-          const res = await axios.get(`http://localhost:8800/api/posts/${postId}`)
+          const res = await axios.get(`${apiUrl}/posts/${postId}`)
           console.log("SINGLE", res.data)
           setPost(res.data)
 
@@ -38,7 +38,7 @@ const Single = () => {
       document.cookie.split(";").map(s=>{access_token=s.startsWith("access")?s.substring("access_token=".length):""});
       console.log("token", access_token)
      
-      await axios.delete(`http://localhost:8800/api/posts/${postId}` ,{data:{access_token: access_token}})
+      await axios.delete(`${apiUrl}/posts/${postId}` ,{data:{access_token: access_token}})
       navigate("/")
     }catch(err){
       console.log(err)

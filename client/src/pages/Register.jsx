@@ -2,7 +2,6 @@ import React from "react"
 import { useState } from "react";
 import { Link , useNavigate } from "react-router-dom";
 import axios from "axios";
-import { AuthContext } from "../context/authContext";
 
 const Register = () => {
   const [inputs, setInputs] = useState({
@@ -15,7 +14,7 @@ const Register = () => {
   const [err,setError] = useState(null)
 
   const navigate = useNavigate();
-
+  const apiUrl = import.meta.env.VITE_BACKEND_API_URL;
   const handleChange = (e) =>{
     setInputs((prev)=>({...prev, [e.target.name]: e.target.value}))
   }
@@ -23,7 +22,7 @@ const Register = () => {
   const handleSubmit = async (e) =>{
     e.preventDefault()
     try{
-      const res = await axios.post("http://localhost:8800/api/auth/register",inputs) 
+      const res = await axios.post(`${apiUrl}/auth/register`,inputs) 
       navigate("/login");
       console.log(res);
     }
@@ -43,7 +42,7 @@ const Register = () => {
       navigate("/")
         const formData = new FormData()
           formData.append("userImg",userImg)
-          const res = axios.post("http://localhost:8800/api/upload",formData)
+          const res = axios.post(`${apiUrl}/upload`,formData)
           return res.data
     }
     catch(err){

@@ -16,12 +16,12 @@ const Write = () => {
 
 
   const navigate = useNavigate()
+  const apiUrl = import.meta.env.VITE_BACKEND_API_URL;
   const upload = async ()=>{
     try{
       const formData = new FormData()
       formData.append("file",file)
-      const res = await axios.post("http://localhost:8800/api/upload",formData)
-      console.log(">>>>>>>>>>>>>>>>>",res.data)
+      const res = await axios.post(`${apiUrl}/upload`,formData)
       return res.data
     }catch(err){
       console.log(err)
@@ -37,9 +37,9 @@ const Write = () => {
       console.log("oooooooooo",document.cookie)
       console.log("tokeni", access_token)
 
-      state? await axios.put(`http://localhost:8800/api/posts/${state.id}`,{
+      state? await axios.put(`${apiUrl}/posts/${state.id}`,{
         title, desc:value, cat, img:file ? imgUrl: "",  access_token,
-      } ):  await axios.post(`http://localhost:8800/api/posts/`,{        
+      } ):  await axios.post(`${apiUrl}/api/posts/`,{        
         title, desc:value, cat, img:file ? imgUrl: "", access_token,
         date:moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
     })

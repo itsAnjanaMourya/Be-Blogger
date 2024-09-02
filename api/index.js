@@ -1,3 +1,5 @@
+import dotenv from "dotenv"; 
+dotenv.config();
 import express from "express"
 import authRoutes from "./routes/auth.js"
 import userRoutes from "./routes/users.js"
@@ -11,12 +13,14 @@ import jwt from "jsonwebtoken";
 
 const app = express()
 
+const port = process.env.PORT || 8900
+const baseUrl = process.env.BASE_URL;
 
 app.use(express.json())
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser())
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }))
+app.use(cors({ credentials: true, origin: baseUrl}))
 app.use("/api/auth",authRoutes)
 app.use("/api/users",userRoutes)
 app.use("/api/posts",postRoutes)
@@ -32,20 +36,15 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage })
-// app.use(upload.array()); 
-// app.use(express.static('public'));
 
 
 app.post("/api/upload", upload.single("file"), function(req,res){
     const file = req.file
-    console.log("fiiiile",file)
     res.status(200).json(file.filename)
 })
 
 app.post("/api/profileUpload", upload.single("file"), function(req,res){
     const file = req.file
-    console.log("fiiiile",file)
-    console.log("body",req.body)
     jwt.verify(req.body.access_token, "jwtkey",(err, userInfo)=>{
         if(err) return res.status(403).json("Token is not valid!")
 
@@ -64,6 +63,6 @@ app.post("/api/profileUpload", upload.single("file"), function(req,res){
     })
 })
 
-app.listen(8800,()=>{
+app.listen(port,()=>{
     console.log("Connected!")
 })

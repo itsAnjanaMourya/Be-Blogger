@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState  } from "react"
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
@@ -8,8 +9,12 @@ const Home = () => {
    const [expand, setExpand] = useState({})
    const { currentUser } = useContext(AuthContext)
    
+
+   const apiUrl = import.meta.env.VITE_BACKEND_API_URL;
+
   const cat = useLocation().search
     useEffect(()=>{
+      console.log("from d",apiUrl)
       const fetchData = async ()=>{
         try{
           let res;
@@ -18,20 +23,13 @@ const Home = () => {
             console.log(document.cookie)
             document.cookie.split(";").map(s=>{access_token=s.startsWith("access")?s.substring("access_token=".length):""});
             console.log("token",access_token)
-            res=await axios.post(`http://localhost:8800/api/posts/myBlog`, {access_token:access_token})
+            res=await axios.post(`${apiUrl}/posts/myBlog`, {access_token:access_token})
           }
           else{
-            res = await axios.get(`http://localhost:8800/api/posts/${cat}`)
+            res = await axios.get(`${apiUrl}/posts/${cat}`)
           }
           console.log("Home",res)
           
-        // Decode BLOB data before setting the state
-        // const postsWithDecodedDesc = res.data.map(post => ({
-        //   ...post,
-        //   desc: getText(post.desc),
-        // }));
-
-        // setPosts(postsWithDecodedDesc);
         setPosts(res.data)
       } catch (err) {
         console.log(err);
@@ -76,51 +74,3 @@ const Home = () => {
   );
 };
 export default Home
-
-
-// const readFunction=(e)=>{
-  //     console.log("readadadadadadad")
-  //     const readMoreBtn = document.getElementById('readMoreBtn');
-  //      let postContent = document.getElementById('postContent');  
-  //   //  console.log("iiiiiiiiiii",postContent.style.maxHeight)
-  //   //  console.log("..............",postContent.textContent.length)
-  //   //  console.log("..............",postContent.textContent)
-  //         // Toggle the 'read more' state by changing the max-height property
-  //         if (postContent.style.maxHeight) {
-  //           postContent.style.maxHeight = null;// Show full content
-  //           readMoreBtn.textContent = 'Read Less';
-  //       } else {
-           
-  //           postContent.style.maxHeight = "100px"; 
-  //           readMoreBtn.textContent = 'Read More';// Show partial content
-  //       }
-  
-  // }
-  
-
-// const posts = [
-//       {
-//         id: 1,
-//         title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-//         desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
-//         img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-//       },
-//       {
-//         id: 2,
-//         title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-//         desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
-//         img: "https://images.pexels.com/photos/6489663/pexels-photo-6489663.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-//       },
-//       {
-//         id: 3,
-//         title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-//         desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
-//         img: "https://images.pexels.com/photos/4230630/pexels-photo-4230630.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-//       },
-//       {
-//         id: 4,
-//         title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-//         desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
-//         img: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-//       },
-//     ];
