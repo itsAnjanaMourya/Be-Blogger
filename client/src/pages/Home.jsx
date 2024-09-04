@@ -23,10 +23,10 @@ const Home = () => {
             console.log(document.cookie)
             document.cookie.split(";").map(s=>{access_token=s.startsWith("access")?s.substring("access_token=".length):""});
             console.log("token",access_token)
-            res=await axios.post(`${apiUrl}/posts/myBlog`, {access_token:access_token})
+            res=await axios.post(`${apiUrl}/posts/myBlog`, {access_token:access_token}, { withCredentials: true })
           }
           else{
-            res = await axios.get(`${apiUrl}/posts/${cat}`)
+            res = await axios.get(`${apiUrl}/posts/${cat}`, { withCredentials: true })
           }
           console.log("Home",res)
           
